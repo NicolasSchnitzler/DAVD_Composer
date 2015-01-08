@@ -58,7 +58,7 @@ FilterNode::FilterNode(void) : dtkComposerNodeLeafProcess(), d(new FilterNodePri
     this->appendReceiver(&(d->maskReceiver));
 
     this->appendEmitter(&(d->imageEmitter));
-    d->process = NULL;
+    d->process = new FilterProcess();
 }
 
 //! Node destructor
@@ -136,41 +136,29 @@ dtkAbstractProcess *FilterNode::process(void) const
 //! Executes the logic of the node.
 void FilterNode::run(void)
 {
-    //  Here is a sample of what can be the logic of a process node. (You
-    //  can erase it of course ;-) !)
+    qDebug()<<"filterNode";
+    if (d->imageReceiver.isEmpty()||d->maskReceiver.isEmpty())
+    {
 
-    /*
-    if (!d->receiver_index.isEmpty() && !d->receiver_vector.isEmpty() && !d->receiver_process_array.isEmpty()) {
-
-        if (!d->process) {
-            dtkWarn() << Q_FUNC_INFO << "No process instanciated, abort:"<< this->currentImplementation();
-            d->emitter_data.clearData();
-            d->emitter_scalar_array.clearData();
-            return;
-        }
-
-        qlonglong index = *d->receiver_index.process();
-        dtkVectorReal *vector = d->receiver_vector.process();
-        dtkContainerVector<dtkAbstractProcess*> *process_array = d->receiver_process_array.process();
-
-        d->process->setParamater(index, 0);
-
-        for(int i = 0; i < vector->size(); ++i)
-            d->process->setParamater(*vector[i], i+1);
-
-        d->process->setData(process_array->first());
-
-        d->process->update();
-
-        d->emitter_process.setData(d->process->output());
-        d->emitter_scalar_array.setProcess(reinterpret_cast<dtkContainerVector<qreal> *>(d->process->data()));
-
-    } else {
-        dtkWarn() << Q_FUNC_INFO << "The input are not all set. Nothing is done.";
-        d->emitter_data.clearData();
-        d->emitter_scalar_array.clearData();
+        qDebug() << Q_FUNC_INFO << "No data, abort:"<< this->currentImplementation();
         return;
     }
-    */
+
+    if (!d->process)
+    {
+        qDebug() << Q_FUNC_INFO << "No process instanciated, abort:"<< this->currentImplementation();
+        d->imageEmitter.clearData();
+        return;
+    }
+    Image* img= d->imageReceiver.data();
+    Image* mask=d->maskReceiver.data();
+
+    qDebug()<<"filterNode received all its data";
+    d->process->setInput(mask,0);
+    d->process->setInput(img,1);
+    d->process->update();
+    qDebug()<<"returned from process";
+    d->imageEmitter.setData(d->process->output());
+
 }
 

@@ -15,6 +15,9 @@
 #define SEGMENTATIONPROCESS_H
 
 #include <dtkCoreSupport/dtkAbstractProcess.h>
+#include <QBitmap>
+#include "pixmapwrapper.h"
+#include "drawablelabel.h"
 #include "Image.h"
 
 class SegmentationProcessPrivate;
@@ -34,11 +37,17 @@ public:
 public:
     QString identifier(void) const;
 
-
+public slots:
+    void receiveUserData(QPolygon p);
 
 public:
-    virtual void run();
+    virtual int update();
     virtual Image* output();
+    virtual void setInput(Image *data);
+
+signals:
+    void userInputReceived();
+    void requestUserInput(Image*,SegmentationProcess*);
 
 private:
     SegmentationProcessPrivate* d;

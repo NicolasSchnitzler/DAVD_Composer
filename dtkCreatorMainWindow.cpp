@@ -133,7 +133,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composer = new dtkComposerWidget;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
     d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
-    d->composer->setFactory(new DavdComposerNodeFactory());
+    d->composer->setFactory(new DavdComposerNodeFactory(this));
 
     d->controls = NULL;
 
@@ -161,10 +161,15 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->graph->setVisible(false);
     d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
 
+
+
     // d->log_view = new dtkLogView(this);
     // d->log_view->setVisible(false);
 
     d->view_manager = new dtkViewManager;
+    d->visuWidget=new QWidget(this);
+    d->visuWidget->setLayout(new QVBoxLayout());
+
 #if defined(DTK_BUILD_SUPPORT_PLOT)
     d->plot_view_settings = new dtkPlotViewSettings(d->view_manager);
     d->view_manager->addWidget(d->plot_view_settings);
@@ -200,16 +205,22 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *switchToDstrbAction = new QAction("Switch to distributed perspective", this);
     QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
     QAction *switchToViewAction = new QAction("Switch to view perspective", this);
+    QAction *switchToVisuAction = new QAction("Switch to visualization perspective", this);
+
 
     switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_1);
     switchToDstrbAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
     switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_3);
     switchToViewAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_4);
+    switchToVisuAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_5);
+
 
     this->addAction(switchToCompoAction);
     this->addAction(switchToDstrbAction);
     this->addAction(switchToDebugAction);
     this->addAction(switchToViewAction);
+    this->addAction(switchToVisuAction);
+
 
     // -- Toolbar
 
@@ -258,6 +269,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->view_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
     d->view_button->setFixedSize(75, 25);
     d->view_button->setCheckable(true);
+
+    d->visu_button = new QPushButton("Visu", buttons);
+    d->visu_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
+    d->visu_button->setFixedSize(75, 25);
+    d->visu_button->setCheckable(true);
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #else
     d->view_button->setVisible(false);
@@ -268,6 +284,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     button_group->addButton(d->compo_button);
     button_group->addButton(d->distr_button);
     button_group->addButton(d->debug_button);
+    button_group->addButton(d->visu_button);
+
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     button_group->addButton(d->view_button);
 #endif
@@ -275,9 +293,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
     buttons_layout->setMargin(0);
     buttons_layout->setSpacing(11);
+    buttons_layout->addWidget(d->visu_button);
     buttons_layout->addWidget(d->compo_button);
     buttons_layout->addWidget(d->distr_button);
     buttons_layout->addWidget(d->debug_button);
+
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     buttons_layout->addWidget(d->view_button);
 #endif
@@ -321,11 +341,14 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->composer->scene()->maskEdgesAction());
     d->edit_menu->addAction(d->composer->scene()->unmaskEdgesAction());
 
+
     QMenu *view_menu = menu_bar->addMenu("View");
     view_menu->addAction(switchToCompoAction);
     view_menu->addAction(switchToDstrbAction);
     view_menu->addAction(switchToDebugAction);
     view_menu->addAction(switchToViewAction);
+    view_menu->addAction(switchToVisuAction);
+
 
     dtkScreenMenu *screen_menu = new dtkScreenMenu("Screen",this);
     menu_bar->addMenu(screen_menu);
@@ -357,6 +380,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
     connect(switchToViewAction, SIGNAL(triggered()), this, SLOT(switchToView()));
+    connect(switchToVisuAction, SIGNAL(triggered()), this, SLOT(switchToVisu()));
+
 
     connect(showControlsAction, SIGNAL(triggered()), this, SLOT(showControls()));
 
@@ -366,6 +391,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
     connect(d->debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
     connect(d->view_button, SIGNAL(pressed()), this, SLOT(switchToView()));
+    connect(d->visu_button, SIGNAL(pressed()), this, SLOT(switchToVisu()));
+
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
@@ -436,6 +463,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     //FIXME
     // dtkNotify(QString("Discovered %1 plugins").arg(dtkPluginManager::instance()->plugins().count()), 5000);
+
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -703,7 +731,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->inner->setSizes(QList<int>() << d->wl << w/2 << w/2 << d->wr);
 }
 
-void dtkCreatorMainWindow::switchToView(void)
+void dtkCreatorMainWindow::switchToView()
 {
     dtkNotify("View workspace", 2000);
 
@@ -723,9 +751,48 @@ void dtkCreatorMainWindow::switchToView(void)
     d->editor->setVisible(false);
     d->stack->setVisible(false);
     d->distributor->setVisible(false);
-    d->view_manager->setVisible(true);
+    d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
+
+    // d->log_view->setVisible(false);
+}
+
+void dtkCreatorMainWindow::switchToVisu(Image *img, SegmentationProcess* process)
+{
+    dtkNotify("Visu workspace", 2000);
+
+    d->visu_button->blockSignals(true);
+    d->visu_button->setChecked(true);
+    d->visu_button->blockSignals(false);
+
+    if(!d->wl && !d->wr) {
+        d->wl = d->nodes->size().width();
+        d->wr = d->stack->size().width();
+    }
+
+    d->composer->setVisible(false);
+    d->composer->compass()->setVisible(false);
+    d->nodes->setVisible(false);
+    d->scene->setVisible(false);
+    d->editor->setVisible(false);
+    d->stack->setVisible(false);
+    d->distributor->setVisible(false);
+    d->view_manager->setVisible(false);
+
+    d->graph->setVisible(false);
+    d->visuWidget->setVisible(true);
+
+    if(img)
+    {
+        DrawableLabel* dl=new DrawableLabel(img);
+        connect(dl,SIGNAL(done(QPolygon)),process,SLOT(receiveUserData(QPolygon)));
+        d->visuWidget->layout()->addWidget(dl);
+        d->visuWidget->layout()->addWidget(new QLabel("test"));
+        d->visuWidget->show();
+
+    }
+
     // d->log_view->setVisible(false);
 }
 

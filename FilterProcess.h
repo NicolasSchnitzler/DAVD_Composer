@@ -16,7 +16,11 @@
 
 #include <dtkCoreSupport/dtkAbstractProcess.h>
 #include "FilterProcess.h"
+#include <QEventLoop>
+#include <QLabel>
+#include <QBitmap>
 #include "Image.h"
+#include "pixmapwrapper.h"
 
 class FilterProcessPrivate;
 
@@ -34,7 +38,8 @@ public:
 
     virtual QString identifier(void) const ;
     Image* output();
-    void run();
+    virtual int update();
+    void setInput(dtkAbstractData*,int);
 
 
 private:

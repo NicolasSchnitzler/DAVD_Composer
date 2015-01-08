@@ -154,43 +154,17 @@ QString ImageWriterNode::abstractDataType(void) const
  */
 void ImageWriterNode::run(void)
 {
-    //  Here is a sample of what can be the logic of a data node. (You
-    //  can erase it of course ;-) !)
-
-    /*
-    if (!d->receiver_index.isEmpty() && !d->receiver_vector.isEmpty() && !d->receiver_data_array.isEmpty()) {
-
-        qlonglong index = *d->receiver_index.data();
-        dtkVectorReal *vector = d->receiver_vector.data();
-        dtkContainerVector<dtkAbstractData*> *data_array = d->receiver_data_array.data();
-
-        if (this->implementationHasChanged())
-            d->data = reinterpret_cast<Image*>(this->data());
-
-        if (!d->data) {
-            dtkWarn() << "no data, abort "<< this->currentImplementation();
-            return;
-        }
-
-        d->data->setParamater(index, 0);
-
-        for (int i = 0; i < vector->size(); ++i)
-            d->data->setParamater(*vector[i], i+1);
-
-
-        d->data->setData(data_array->first());
-
-        d->data->update();
-
-        d->emitter_data.setData(d->data);
-        d->emitter_scalar_array.setData(reinterpret_cast<dtkContainerVector<qreal> *>(d->data->data()));
-
-    } else {
-        dtkWarn() << "The input are not all set. Nothing is done.";
-        d->emitter_data.clearData();
-        d->emitter_scalar_array.clearData();
+    qDebug()<<"ImageWriter";
+    if (d->receiver.isEmpty())
+    {
+        qDebug() << Q_FUNC_INFO << "No data, abort:"<< this->currentImplementation();
         return;
     }
-    */
+
+    Image* img= d->receiver.data();
+    QPixmap* pix=dynamic_cast<QPixmap*>(img);
+    pix->save("/user/nschnitz/home/Pictures/save.png");
+
+
 }
 

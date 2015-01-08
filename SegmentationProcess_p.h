@@ -35,6 +35,8 @@ public:
 public:
     Image* image;
     Image* mask;
+    QPolygon m_polygon;
+    bool m_connected;
 };
 
 ////////////////////////////////////////////////////

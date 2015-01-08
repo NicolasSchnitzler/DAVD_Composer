@@ -13,6 +13,7 @@ TARGET = DAVD
 TEMPLATE = app
 
 CONFIG += c++11
+
 SOURCES += main.cpp\
     dtkCreatorMainWindow.cpp \
     davdcomposernodefactory.cpp \
@@ -22,7 +23,11 @@ SOURCES += main.cpp\
     nodes/FilterNode.cpp \
     nodes/ImageReaderNode.cpp \
     nodes/ImageWriterNode.cpp \
-    nodes/SegmentationNode.cpp
+    nodes/SegmentationNode.cpp \
+    pixmapwrapper.cpp \
+    pixmapreaderclass.cpp \
+    drawablelabel.cpp \
+    interactivecomposernode.cpp
 
 
 
@@ -35,7 +40,6 @@ HEADERS += \
     dtkCreatorMainWindow.h \
     davdcomposernodefactory.h \
     Image.h \
-    Image_p.h \
     SegmentationProcess_p.h \
     SegmentationProcess.h \
     FilterProcess_p.h \
@@ -43,4 +47,9 @@ HEADERS += \
     nodes/FilterNode.h \
     nodes/ImageReaderNode.h \
     nodes/ImageWriterNode.h \
-    nodes/SegmentationNode.h
+    nodes/SegmentationNode.h \
+    pixmapwrapper.h \
+    pixmapreaderclass.h \
+    Image_p.h \
+    drawablelabel.h \
+    interactivecomposernode.h

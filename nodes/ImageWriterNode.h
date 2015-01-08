@@ -15,6 +15,7 @@
 #define IMAGEWRITERNODE_H
 
 #include <dtkComposer/dtkComposerNodeLeafData.h>
+#include <QPixmap>
 #include "Image.h"
 
 class ImageWriterNodePrivate;

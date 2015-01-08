@@ -17,7 +17,16 @@
 #include <dtkLog/dtkLog.h>
 
 Image::Image(): dtkAbstractData()
-{}
+{
+    //DTK_D(Image);
+
+}
+
+Image::Image(dtkAbstractData &img):dtkAbstractData(img)
+{
+    qDebug()<<"copy constructor";
+    this->copy(img);
+}
 
 Image::~Image()
 {
@@ -33,3 +42,9 @@ QString Image::identifier(void) const
     return "Image";
 }
 
+void Image::copy(const dtkAbstractObject& other)
+{
+    qDebug()<<"clone";
+    dtkAbstractData::copy(other);
+
+}

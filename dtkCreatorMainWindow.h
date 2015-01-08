@@ -23,6 +23,8 @@
 #include <dtkComposer/dtkComposerWriter.h>
 
 #include <QtWidgets>
+#include "SegmentationProcess.h"
+#include "Image.h"
 
 class dtkAbstractView;
 class dtkCreatorMainWindowPrivate;
@@ -52,6 +54,7 @@ protected slots:
     void switchToDstrb(void);
     void switchToDebug(void);
     void switchToView(void);
+    void switchToVisu(Image *img=0, SegmentationProcess *process=0);
 
 protected slots:
     void showControls(void);

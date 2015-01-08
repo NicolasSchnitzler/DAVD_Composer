@@ -17,6 +17,10 @@
 
 #include <dtkLog/dtkLog.h>
 #include "ImageReaderNode.h"
+#include "drawablelabel.h"
+#include "pixmapreaderclass.h"
+
+#include <QLabel>
 
 // /////////////////////////////////////////////////////////////////
 // ImageReaderNodePrivate interface
@@ -31,11 +35,8 @@ public:
 
 public:
 
-      /*Here one must declare the outputs of the node using
-      dtkComposerTransmitterEmitter<T>, eg:*/
 
-
-      dtkComposerTransmitterEmitter<dtkAbstractData> emitter_data;
+      dtkComposerTransmitterEmitter<Image*> emitter_data;
 
 
 public:
@@ -45,12 +46,6 @@ public:
 
       Image *image;
 
-
-public:
-    /*
-      Additional variables are sometimes necessary, one can declare
-      them right here.
-     */
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -72,10 +67,10 @@ ImageReaderNode::ImageReaderNode(void) : dtkComposerNodeLeafData(), d(new ImageR
         this->appendEmitter(&(d->emitter_data));
 
 
-
         //Do not forget to set the any pointers to NULL.
 
-        d->image = NULL;
+    d->image=NULL;
+
 }
 
 //! Node destructor
@@ -98,7 +93,7 @@ ImageReaderNode::~ImageReaderNode(void)
  */
 QString ImageReaderNode::type(void)
 {
-    return "ImageReaderNode";
+    return "ImageReader";
 }
 
 //! Returns the title of the node that appears in the composer GUI.
@@ -165,27 +160,18 @@ QString ImageReaderNode::abstractDataType(void) const
  */
 void ImageReaderNode::run(void)
 {
+    QString path="/user/nschnitz/home/Pictures/med.png";
+    d->image=NULL;
+    PixmapWrapper* pix=new PixmapWrapper(path);
+    d->image=pix;
 
-    dtkAbstractDataReader *reader = NULL;
-    QString path="";
-    foreach(QString type, dtkAbstractDataFactory::instance()->readers())
-    {
-        reader = dtkAbstractDataFactory::instance()->reader(type);
-        if (reader && reader->canRead(path))
-        {
-            reader->read(path);
-            d->image = qobject_cast<Image *>(reader->data());
-            break;
-        }
-    }
-
-    if(!d->image) {
-        dtkWarn()<<"No reader found, bye bye";
-        return;
-    }
 
     d->image->update();
 
+
+
     d->emitter_data.setData(d->image);
+
 }
+
 

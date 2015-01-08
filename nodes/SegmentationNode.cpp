@@ -28,8 +28,8 @@ public:
     SegmentationProcess *process;
 
 public:
-    dtkComposerTransmitterReceiver<Image> receiver;
-    dtkComposerTransmitterEmitter<Image> emitter;
+    dtkComposerTransmitterReceiver<Image*> receiver;
+    dtkComposerTransmitterEmitter<Image*> emitter;
 
 };
 
@@ -41,7 +41,7 @@ SegmentationNode::SegmentationNode(void) : dtkComposerNodeLeafProcess(), d(new S
 {
     this->appendReceiver(&(d->receiver));
     this->appendEmitter(&(d->emitter));
-    d->process = NULL;
+    d->process = new SegmentationProcess();
 }
 
 SegmentationNode::~SegmentationNode(void)
@@ -64,7 +64,7 @@ SegmentationNode::~SegmentationNode(void)
  */
 QString SegmentationNode::type(void)
 {
-    return "SegmentationNode"; // Do not forget to remove "ComposerNode" from type name.
+    return "Segmentation"; // Do not forget to remove "ComposerNode" from type name.
 }
 
 //! Returns the title of the node that appears in the composer GUI.
@@ -112,24 +112,24 @@ dtkAbstractProcess *SegmentationNode::process(void) const
 //! Executes the logic of the node.
 void SegmentationNode::run(void)
 {
-    if (!d->receiver.isEmpty())
+    if (d->receiver.isEmpty())
     {
 
-        dtkWarn() << Q_FUNC_INFO << "No data, abort:"<< this->currentImplementation();
+        qDebug() << Q_FUNC_INFO << "No data, abort:"<< this->currentImplementation();
         return;
     }
 
     if (!d->process)
     {
-        dtkWarn() << Q_FUNC_INFO << "No process instanciated, abort:"<< this->currentImplementation();
+        qDebug() << Q_FUNC_INFO << "No process instanciated, abort:"<< this->currentImplementation();
         d->emitter.clearData();
         return;
     }
-    Image img= d->receiver.data();
+    Image* img= d->receiver.data();
 
-    d->process->setInput(&img);
+    d->process->setInput(img);
     d->process->update();
-    d->emitter.setData(*d->process->output());
+    d->emitter.setData(d->process->output());
 
 
 }

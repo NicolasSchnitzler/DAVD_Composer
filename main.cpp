@@ -22,6 +22,7 @@
 #include <dtkCore/dtkCorePluginManager.h>
 
 #include "dtkCreatorMainWindow.h"
+#include "pixmapreaderclass.h"
 
 #include <QtGui>
 
@@ -47,6 +48,7 @@ int main(int argc, char **argv)
         dtkLogger::instance().setLevel(dtkLog::Trace);
 
     dtkLogger::instance().attachFile(dtkLogPath(&application));
+    PixmapReaderClass::initialize();
 
     // dtkCorePluginManager::instance()->initialize();
 

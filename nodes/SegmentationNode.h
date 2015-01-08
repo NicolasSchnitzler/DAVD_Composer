@@ -51,6 +51,7 @@ public:
 public:
     void run(void);
 
+
 private:
     SegmentationNodePrivate *d;
 };

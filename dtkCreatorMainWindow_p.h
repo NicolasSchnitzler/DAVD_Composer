@@ -21,6 +21,7 @@
 
 #include <QtCore>
 #include <QtWidgets>
+#include <QLabel>
 
 class dtkComposerWidget;
 class dtkComposerControls;
@@ -71,6 +72,7 @@ public:
     dtkComposerSceneNodeEditor *editor;
     dtkComposerSceneView *scene;
     dtkComposerStackView *stack;
+    QWidget* visuWidget;
 
 public:
     dtkDistributor *distributor;
@@ -104,6 +106,8 @@ public:
     QPushButton *distr_button;
     QPushButton *debug_button;
     QPushButton *view_button;
+    QPushButton *visu_button;
+
 
 public:
     bool closing;
