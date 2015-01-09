@@ -2,6 +2,7 @@
 
 DrawableLabel::DrawableLabel(Image* img)
 {
+    setFocusPolicy(Qt::StrongFocus);
     m_image=img;
     PixmapWrapper* pix=dynamic_cast<PixmapWrapper*> (img);
     if(pix)
@@ -36,6 +37,7 @@ void DrawableLabel::keyPressEvent ( QKeyEvent * evt)
 {
     if(evt->key()==Qt::Key_Return || evt->key()==Qt::Key_Enter)
     {
+        qDebug()<<"done emitted";
         emit done(QPolygon(m_points));
     }
     else if(evt->key()==Qt::Key_Backspace)

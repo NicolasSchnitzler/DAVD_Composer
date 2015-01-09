@@ -23,6 +23,8 @@
 #include <QtWidgets>
 #include <QLabel>
 
+#include <drawablelabel.h>
+
 class dtkComposerWidget;
 class dtkComposerControls;
 class dtkComposerNodeFactoryView;
@@ -119,6 +121,9 @@ public:
     int wl;
     int wr;
     int wg;
+
+    int currentIndex;
+    DrawableLabel *dl;
 
 public:
     dtkCreatorMainWindow *q;

@@ -58,7 +58,7 @@ protected slots:
 
 protected slots:
     void showControls(void);
-
+    void restoreTab(void);
     void onViewFocused(dtkAbstractView *view);
 
 protected:

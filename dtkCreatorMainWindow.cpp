@@ -413,6 +413,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     left->addWidget(d->nodes);
     left->addWidget(d->distributor);
     left->addWidget(d->view_manager);
+    left->addWidget(d->visuWidget);
 
     dtkSplitter *right = new dtkSplitter(this);
     right->setOrientation(Qt::Vertical);
@@ -454,6 +455,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->setCentralWidget(central);
     this->setStyleSheet(dtkReadFile(":dtkCreator/dtkCreator.qss"));
     this->setUnifiedTitleAndToolBarOnMac(true);
+    d->currentIndex=0;
 
 #if defined(Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     d->enableFullScreenSupport();
@@ -648,7 +650,7 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 void dtkCreatorMainWindow::switchToCompo(void)
 {
     dtkNotify("Composition workspace", 2000);
-
+    d->currentIndex=0;
     d->compo_button->blockSignals(true);
     d->compo_button->setChecked(true);
     d->compo_button->blockSignals(false);
@@ -666,6 +668,8 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->stack->setVisible(true);
     d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
+    d->visuWidget->setVisible(false);
+
 
     d->graph->setVisible(false);
     // d->log_view->setVisible(false);
@@ -676,7 +680,7 @@ void dtkCreatorMainWindow::switchToCompo(void)
 void dtkCreatorMainWindow::switchToDstrb(void)
 {
     dtkNotify("Distribution workspace", 2000);
-
+    d->currentIndex=1;
     d->distr_button->blockSignals(true);
     d->distr_button->setChecked(true);
     d->distr_button->blockSignals(false);
@@ -694,6 +698,8 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     d->stack->setVisible(true);
     d->distributor->setVisible(true);
     d->view_manager->setVisible(false);
+    d->visuWidget->setVisible(false);
+
 
     d->graph->setVisible(false);
     // d->log_view->setVisible(false);
@@ -704,7 +710,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
 void dtkCreatorMainWindow::switchToDebug(void)
 {
     dtkNotify("Debug workspace", 2000);
-
+    d->currentIndex=2;
     d->debug_button->blockSignals(true);
     d->debug_button->setChecked(true);
     d->debug_button->blockSignals(false);
@@ -722,6 +728,8 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->stack->setVisible(false);
     d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
+    d->visuWidget->setVisible(false);
+
 
     d->graph->setVisible(true);
     // d->log_view->setVisible(true);
@@ -734,7 +742,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
 void dtkCreatorMainWindow::switchToView()
 {
     dtkNotify("View workspace", 2000);
-
+    d->currentIndex=3;
     d->view_button->blockSignals(true);
     d->view_button->setChecked(true);
     d->view_button->blockSignals(false);
@@ -752,6 +760,8 @@ void dtkCreatorMainWindow::switchToView()
     d->stack->setVisible(false);
     d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
+    d->visuWidget->setVisible(false);
+
 
     d->graph->setVisible(false);
 
@@ -785,15 +795,38 @@ void dtkCreatorMainWindow::switchToVisu(Image *img, SegmentationProcess* process
 
     if(img)
     {
-        DrawableLabel* dl=new DrawableLabel(img);
-        connect(dl,SIGNAL(done(QPolygon)),process,SLOT(receiveUserData(QPolygon)));
-        d->visuWidget->layout()->addWidget(dl);
-        d->visuWidget->layout()->addWidget(new QLabel("test"));
+        d->dl=new DrawableLabel(img);
+        connect(d->dl,SIGNAL(done(QPolygon)),process,SLOT(receiveUserData(QPolygon)));
+        connect(process,SIGNAL(userInputReceived()),this,SLOT(restoreTab()));
+        d->visuWidget->layout()->addWidget(d->dl);
         d->visuWidget->show();
 
     }
 
     // d->log_view->setVisible(false);
+}
+
+void dtkCreatorMainWindow::restoreTab(void)
+{
+   d->visuWidget->layout()->removeWidget(d->dl);
+    switch(d->currentIndex)
+    {
+        case 0:
+        switchToCompo();
+        break;
+
+    case 1:
+        switchToDstrb();
+        break;
+
+    case 2:
+        switchToDebug();
+        break;
+
+    case 3:
+        switchToView();
+        break;
+    }
 }
 
 void dtkCreatorMainWindow::showControls(void)
