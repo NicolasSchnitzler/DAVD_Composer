@@ -14,7 +14,7 @@
 #ifndef FILTERNODE_H
 #define FILTERNODE_H
 
-#include <dtkComposer/dtkComposerNodeLeafProcess.h>
+#include <dtkComposerSupport/dtkComposerNodeLeafProcess.h>
 
 class FilterNodePrivate;
 

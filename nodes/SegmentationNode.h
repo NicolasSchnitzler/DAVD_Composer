@@ -14,7 +14,7 @@
 #ifndef SEGMENTATIONNODE_H
 #define SEGMENTATIONNODE_H
 
-#include <dtkComposer/dtkComposerNodeLeafProcess.h>
+#include <dtkComposerSupport/dtkComposerNodeLeafProcess.h>
 #include "SegmentationProcess.h"
 #include "Image.h"
 

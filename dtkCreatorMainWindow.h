@@ -20,7 +20,7 @@
 #ifndef DTKCREATORMAINWINDOW_H
 #define DTKCREATORMAINWINDOW_H
 
-#include <dtkComposer/dtkComposerWriter.h>
+#include <dtkComposerSupport/dtkComposerWriter.h>
 
 #include <QtWidgets>
 #include "SegmentationProcess.h"

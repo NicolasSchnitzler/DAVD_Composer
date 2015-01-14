@@ -14,7 +14,7 @@
 #ifndef IMAGEREADERNODE_H
 #define IMAGEREADERNODE_H
 
-#include <dtkComposer/dtkComposerNodeLeafData.h>
+#include <dtkComposerSupport/dtkComposerNodeLeafData.h>
 #include <dtkCoreSupport/dtkAbstractFactory.h>
 #include "Image.h"
 class ImageReaderNodePrivate;

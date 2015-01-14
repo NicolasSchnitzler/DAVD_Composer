@@ -14,7 +14,7 @@
 #ifndef IMAGEWRITERNODE_H
 #define IMAGEWRITERNODE_H
 
-#include <dtkComposer/dtkComposerNodeLeafData.h>
+#include <dtkComposerSupport/dtkComposerNodeLeafData.h>
 #include <QPixmap>
 #include "Image.h"
 

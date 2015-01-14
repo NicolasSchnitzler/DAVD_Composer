@@ -11,8 +11,8 @@
  *
  */
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include <dtkComposerSupport/dtkComposerTransmitterEmitter.h>
+#include <dtkComposerSupport/dtkComposerTransmitterReceiver.h>
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 
 #include <dtkLog/dtkLog.h>
@@ -36,7 +36,7 @@ public:
 public:
 
 
-      dtkComposerTransmitterEmitter<Image*> emitter_data;
+      dtkComposerTransmitterEmitter<Image> emitter_data;
 
 
 public:

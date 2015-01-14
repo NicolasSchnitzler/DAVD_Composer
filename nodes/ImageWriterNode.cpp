@@ -11,8 +11,8 @@
  *
  */
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include <dtkComposerSupport/dtkComposerTransmitterEmitter.h>
+#include <dtkComposerSupport/dtkComposerTransmitterReceiver.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -25,7 +25,7 @@
 class ImageWriterNodePrivate
 {
 public:
-      dtkComposerTransmitterReceiver<Image*> receiver;
+      dtkComposerTransmitterReceiver<Image> receiver;
       Image *data;
 };
 

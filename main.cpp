@@ -19,11 +19,8 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkCore/dtkCorePluginManager.h>
-
-#include "dtkCreatorMainWindow.h"
-#include "pixmapreaderclass.h"
-
+#include <dtkCreatorMainWindow.h>
+#include <pixmapreaderclass.h>
 #include <QtGui>
 
 int main(int argc, char **argv)

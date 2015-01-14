@@ -22,21 +22,20 @@
 
 #include <dtkDistributedSupport/dtkDistributor.h>
 
-#include <dtkComposer/dtkComposer.h>
-#include <dtkComposer/dtkComposerWidget.h>
-#include <dtkComposer/dtkComposerCompass.h>
-#include <dtkComposer/dtkComposerControls.h>
-#include <dtkComposer/dtkComposerEvaluator.h>
-#include <dtkComposer/dtkComposerNodeFactoryView.h>
-#include <dtkComposer/dtkComposerGraph.h>
-#include <dtkComposer/dtkComposerGraphView.h>
-#include <dtkComposer/dtkComposerScene.h>
-#include <dtkComposer/dtkComposerSceneModel.h>
-#include <dtkComposer/dtkComposerSceneNodeEditor.h>
-#include <dtkComposer/dtkComposerSceneView.h>
-#include <dtkComposer/dtkComposerStack.h>
-#include <dtkComposer/dtkComposerStackView.h>
-#include <dtkComposer/dtkComposerView.h>
+#include <dtkComposerSupport/dtkComposer.h>
+#include <dtkComposerSupport/dtkComposerCompass.h>
+#include <dtkComposerSupport/dtkComposerControls.h>
+#include <dtkComposerSupport/dtkComposerEvaluator.h>
+#include <dtkComposerSupport/dtkComposerFactoryView.h>
+#include <dtkComposerSupport/dtkComposerGraph.h>
+#include <dtkComposerSupport/dtkComposerGraphView.h>
+#include <dtkComposerSupport/dtkComposerScene.h>
+#include <dtkComposerSupport/dtkComposerSceneModel.h>
+#include <dtkComposerSupport/dtkComposerSceneNodeEditor.h>
+#include <dtkComposerSupport/dtkComposerSceneView.h>
+#include <dtkComposerSupport/dtkComposerStack.h>
+#include <dtkComposerSupport/dtkComposerStackView.h>
+#include <dtkComposerSupport/dtkComposerView.h>
 
 #include <dtkGuiSupport/dtkScreenMenu.h>
 #include <dtkGuiSupport/dtkRecentFilesMenu.h>
@@ -44,8 +43,6 @@
 #include <dtkGuiSupport/dtkSplitter.h>
 #include <dtkGuiSupport/dtkViewManager.h>
 
-#include <dtkCore/dtkCore.h>
-#include <dtkCore/dtkCorePluginManager.h>
 
 #include "davdcomposernodefactory.h"
 
@@ -130,7 +127,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     //
 
-    d->composer = new dtkComposerWidget;
+    d->composer = new dtkComposer;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
     d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
     d->composer->setFactory(new DavdComposerNodeFactory(this));
@@ -152,7 +149,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->stack = new dtkComposerStackView(this);
     d->stack->setStack(d->composer->stack());
 
-    d->nodes = new dtkComposerNodeFactoryView(this);
+    d->nodes = new dtkComposerFactoryView(this);
     d->nodes->setFactory(d->composer->factory());
 
     d->graph = new dtkComposerGraphView(this);

@@ -11,8 +11,8 @@
  *
  */
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include <dtkComposerSupport/dtkComposerTransmitterEmitter.h>
+#include <dtkComposerSupport/dtkComposerTransmitterReceiver.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -34,13 +34,13 @@ public:
 
 public:
 
-      dtkComposerTransmitterReceiver<Image*> imageReceiver;
-      dtkComposerTransmitterReceiver<Image*> maskReceiver;
+      dtkComposerTransmitterReceiver<Image> imageReceiver;
+      dtkComposerTransmitterReceiver<Image> maskReceiver;
 
 
 public:
 
-      dtkComposerTransmitterEmitter<Image*> imageEmitter;
+      dtkComposerTransmitterEmitter<Image> imageEmitter;
 
 };
 

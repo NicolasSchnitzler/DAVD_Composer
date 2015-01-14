@@ -25,9 +25,9 @@
 
 #include <drawablelabel.h>
 
-class dtkComposerWidget;
+class dtkComposer;
 class dtkComposerControls;
-class dtkComposerNodeFactoryView;
+class dtkComposerFactoryView;
 class dtkComposerGraphView;
 class dtkComposerSceneModel;
 class dtkComposerSceneNodeEditor;
@@ -66,9 +66,9 @@ public slots:
     void setModified(bool modified);
 
 public:
-    dtkComposerWidget *composer;
+    dtkComposer *composer;
     dtkComposerControls *controls;
-    dtkComposerNodeFactoryView *nodes;
+    dtkComposerFactoryView *nodes;
     dtkComposerGraphView *graph;
     dtkComposerSceneModel *model;
     dtkComposerSceneNodeEditor *editor;

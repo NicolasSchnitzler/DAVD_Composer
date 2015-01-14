@@ -11,8 +11,8 @@
  *
  */
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include <dtkComposerSupport/dtkComposerTransmitterEmitter.h>
+#include <dtkComposerSupport/dtkComposerTransmitterReceiver.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -28,8 +28,8 @@ public:
     SegmentationProcess *process;
 
 public:
-    dtkComposerTransmitterReceiver<Image*> receiver;
-    dtkComposerTransmitterEmitter<Image*> emitter;
+    dtkComposerTransmitterReceiver<Image> receiver;
+    dtkComposerTransmitterEmitter<Image> emitter;
 
 };
 
